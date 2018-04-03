@@ -1,0 +1,968 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Resource API",
+        "description": "Manage Resources",
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "schemes": ["http"],
+    "consumes": ["application/json", "application/xml", "application/gob", "application/x-gob"],
+    "produces": ["application/json", "application/xml", "application/gob", "application/x-gob"],
+    "paths": {
+        "/resource/{namespace}/{organization}": {
+            "post": {
+                "tags": ["resource"],
+                "summary": "add resource",
+                "description": "Add new resource",
+                "operationId": "add",
+                "produces": ["application/datablox.resource+json", "application/vnd.goa.error"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "payload",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ResourcePayload"
+                    }
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/DatabloxResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            }
+        },
+        "/resource/{namespace}/{organization}/all": {
+            "post": {
+                "tags": ["resource"],
+                "summary": "filterResources resource",
+                "description": "Filter (lookup) resources",
+                "operationId": "filterResources",
+                "produces": ["application/vnd.goa.error", "paginatedresourcesmedia"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "payload",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/FilterResourcePayload"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PaginatedResourcesMedia"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            }
+        },
+        "/resource/{namespace}/{organization}/backends/supported": {
+            "get": {
+                "tags": ["resource"],
+                "summary": "getSupportedBackends resource",
+                "description": "Returns a list of supported backends",
+                "operationId": "getSupportedBackends",
+                "produces": ["application/datablox.supported.backends+json", "application/vnd.goa.error"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DatabloxSupportedBackends"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            }
+        },
+        "/resource/{namespace}/{organization}/{resourceId}": {
+            "get": {
+                "tags": ["resource"],
+                "summary": "getResource resource",
+                "description": "Get resource by ID",
+                "operationId": "getResource",
+                "produces": ["application/datablox.resource+json", "application/vnd.goa.error"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "resourceId",
+                    "in": "path",
+                    "description": "Resource ID",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DatabloxResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            },
+            "put": {
+                "tags": ["resource"],
+                "summary": "updateResource resource",
+                "description": "Updates a resource",
+                "operationId": "updateResource",
+                "produces": ["application/datablox.resource+json", "application/vnd.goa.error"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "resourceId",
+                    "in": "path",
+                    "description": "Resource ID",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "payload",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ResourcePayload"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DatabloxResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            },
+            "delete": {
+                "tags": ["resource"],
+                "summary": "deleteResource resource",
+                "description": "Deletes a resource",
+                "operationId": "deleteResource",
+                "produces": ["application/vnd.goa.error", "text/plain"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "resourceId",
+                    "in": "path",
+                    "description": "Resource ID",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            },
+            "patch": {
+                "tags": ["resource"],
+                "summary": "updateResource resource",
+                "description": "Updates a resource",
+                "operationId": "update1",
+                "produces": ["application/datablox.resource+json", "application/vnd.goa.error"],
+                "parameters": [{
+                    "name": "namespace",
+                    "in": "path",
+                    "description": "Namespace name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "organization",
+                    "in": "path",
+                    "description": "organization name",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "resourceId",
+                    "in": "path",
+                    "description": "Resource ID",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "payload",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/ResourcePayload"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/DatabloxResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                },
+                "schemes": ["http"]
+            }
+        }
+    },
+    "definitions": {
+        "Backend": {
+            "title": "Backend",
+            "type": "object",
+            "properties": {
+                "awsEndpoint": {
+                    "type": "string",
+                    "description": "AWS Endpoint (AWS specific)",
+                    "example": "Delectus aliquid quia aliquam dolore id consectetur."
+                },
+                "awsRegion": {
+                    "type": "string",
+                    "description": "AWS region (AWS specific)",
+                    "example": "Soluta aut illo omnis aliquid totam."
+                },
+                "collection": {
+                    "$ref": "#/definitions/BackendCollection"
+                },
+                "credentials": {
+                    "$ref": "#/definitions/BackendCredentials"
+                },
+                "database": {
+                    "type": "string",
+                    "description": "Database name",
+                    "example": "Officiis autem ut ea."
+                },
+                "host": {
+                    "type": "string",
+                    "description": "Backend host URL (database URL)",
+                    "example": "Vero occaecati error nulla rerum voluptatibus."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Backend type",
+                    "example": "Inventore saepe quidem."
+                }
+            },
+            "example": {
+                "awsEndpoint": "Delectus aliquid quia aliquam dolore id consectetur.",
+                "awsRegion": "Soluta aut illo omnis aliquid totam.",
+                "collection": {
+                    "dynamoGSI": 5161640249498773000,
+                    "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                    "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                    "dynamoReadCapacity": 8066685581955153659,
+                    "dynamoWriteCapacity": 4856487563112190394,
+                    "enableTtl": false,
+                    "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                    "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                    "ttl": 2723488881610954744,
+                    "ttlAttribute": "Voluptatem et."
+                },
+                "credentials": {
+                    "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                    "password": "Qui aut ut sint ut.",
+                    "username": "Aut ea occaecati omnis sed itaque rerum."
+                },
+                "database": "Officiis autem ut ea.",
+                "host": "Vero occaecati error nulla rerum voluptatibus.",
+                "type": "Inventore saepe quidem."
+            },
+            "required": ["type", "host", "database", "credentials", "collection"]
+        },
+        "BackendCollection": {
+            "title": "BackendCollection",
+            "type": "object",
+            "properties": {
+                "dynamoGSI": {
+                    "type": "integer",
+                    "description": "GSI (DynamoDB specific)",
+                    "example": 5161640249498773000
+                },
+                "dynamoHashKey": {
+                    "type": "string",
+                    "description": "Hash key (DynamoDB specific)",
+                    "example": "Qui similique est dolorem quia quidem."
+                },
+                "dynamoRangeKey": {
+                    "type": "string",
+                    "description": "Range key (DynamoDB specific)",
+                    "example": "Possimus ex qui suscipit possimus laborum."
+                },
+                "dynamoReadCapacity": {
+                    "type": "integer",
+                    "description": "Read capacity (DynamoDB specific)",
+                    "example": 8066685581955153659,
+                    "format": "int64"
+                },
+                "dynamoWriteCapacity": {
+                    "type": "integer",
+                    "description": "Write capacity (DynamoDB specific)",
+                    "example": 4856487563112190394,
+                    "format": "int64"
+                },
+                "enableTtl": {
+                    "type": "boolean",
+                    "description": "Is expiration enabled and time-to-live is set on the records.",
+                    "example": false
+                },
+                "indexes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "example": "Maxime debitis ipsam vitae maiores."
+                    },
+                    "description": "Collection indexes",
+                    "example": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."]
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Collection name",
+                    "example": "Commodi in exercitationem voluptatum dolores tempora."
+                },
+                "ttl": {
+                    "type": "integer",
+                    "description": "Time to live in milliseconds",
+                    "example": 2723488881610954744,
+                    "format": "int64"
+                },
+                "ttlAttribute": {
+                    "type": "string",
+                    "description": "Name of the attribute that is used in the TTL calculation.",
+                    "example": "Voluptatem et."
+                }
+            },
+            "example": {
+                "dynamoGSI": 5161640249498773000,
+                "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                "dynamoReadCapacity": 8066685581955153659,
+                "dynamoWriteCapacity": 4856487563112190394,
+                "enableTtl": false,
+                "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                "ttl": 2723488881610954744,
+                "ttlAttribute": "Voluptatem et."
+            },
+            "required": ["name"]
+        },
+        "BackendCredentials": {
+            "title": "BackendCredentials",
+            "type": "object",
+            "properties": {
+                "awsCredentials": {
+                    "type": "string",
+                    "description": "AWS Credentials file path (AWS specific)",
+                    "example": "Libero dolorem quis esse molestias alias."
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password",
+                    "example": "Qui aut ut sint ut."
+                },
+                "username": {
+                    "type": "string",
+                    "description": "Username",
+                    "example": "Aut ea occaecati omnis sed itaque rerum."
+                }
+            },
+            "example": {
+                "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                "password": "Qui aut ut sint ut.",
+                "username": "Aut ea occaecati omnis sed itaque rerum."
+            }
+        },
+        "BackendTypeDefinition": {
+            "title": "BackendTypeDefinition",
+            "type": "object",
+            "properties": {
+                "definition": {
+                    "type": "integer",
+                    "description": "Backend definition fields",
+                    "example": 1021416852495606979
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Backend type",
+                    "example": "Natus accusantium."
+                }
+            },
+            "example": {
+                "definition": 1021416852495606979,
+                "type": "Natus accusantium."
+            },
+            "required": ["type", "definition"]
+        },
+        "DatabloxResource": {
+            "title": "Mediatypeidentifier",
+            "type": "object",
+            "properties": {
+                "backend": {
+                    "$ref": "#/definitions/Backend"
+                },
+                "createdAt": {
+                    "type": "integer",
+                    "description": "Created At timestamp",
+                    "example": 1145754628330979132,
+                    "format": "int64"
+                },
+                "createdBy": {
+                    "type": "string",
+                    "description": "User ID of the user that created the resource",
+                    "example": "Quo est."
+                },
+                "id": {
+                    "type": "string",
+                    "description": "Resource ID (uuid)",
+                    "example": "Eius ipsa consequatur doloribus."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Resource name",
+                    "example": "Enim et voluptatum ut a magnam."
+                },
+                "schema": {
+                    "type": "string",
+                    "description": "Schema URI",
+                    "example": "Velit necessitatibus recusandae minus aut."
+                }
+            },
+            "description": "DatabloxResource media type (default view)",
+            "example": {
+                "backend": {
+                    "awsEndpoint": "Delectus aliquid quia aliquam dolore id consectetur.",
+                    "awsRegion": "Soluta aut illo omnis aliquid totam.",
+                    "collection": {
+                        "dynamoGSI": 5161640249498773000,
+                        "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                        "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                        "dynamoReadCapacity": 8066685581955153659,
+                        "dynamoWriteCapacity": 4856487563112190394,
+                        "enableTtl": false,
+                        "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                        "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                        "ttl": 2723488881610954744,
+                        "ttlAttribute": "Voluptatem et."
+                    },
+                    "credentials": {
+                        "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                        "password": "Qui aut ut sint ut.",
+                        "username": "Aut ea occaecati omnis sed itaque rerum."
+                    },
+                    "database": "Officiis autem ut ea.",
+                    "host": "Vero occaecati error nulla rerum voluptatibus.",
+                    "type": "Inventore saepe quidem."
+                },
+                "createdAt": 1145754628330979132,
+                "createdBy": "Quo est.",
+                "id": "Eius ipsa consequatur doloribus.",
+                "name": "Enim et voluptatum ut a magnam.",
+                "schema": "Velit necessitatibus recusandae minus aut."
+            }
+        },
+        "DatabloxSupportedBackends": {
+            "title": "Mediatypeidentifier",
+            "type": "object",
+            "properties": {
+                "supported": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/BackendTypeDefinition"
+                    },
+                    "description": "Array of supported backends",
+                    "example": [{
+                        "definition": 1021416852495606979,
+                        "type": "Natus accusantium."
+                    }, {
+                        "definition": 1021416852495606979,
+                        "type": "Natus accusantium."
+                    }]
+                }
+            },
+            "description": "DatabloxSupportedBackends media type (default view)",
+            "example": {
+                "supported": [{
+                    "definition": 1021416852495606979,
+                    "type": "Natus accusantium."
+                }, {
+                    "definition": 1021416852495606979,
+                    "type": "Natus accusantium."
+                }]
+            }
+        },
+        "FilterResourcePayload": {
+            "title": "FilterResourcePayload",
+            "type": "object",
+            "properties": {
+                "filter": {
+                    "type": "integer",
+                    "description": "Filter by fields key=\u003evalue",
+                    "example": 5788124398608409906
+                },
+                "order": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/OrderSpecs"
+                    },
+                    "description": "Sort specifications.",
+                    "example": [{
+                        "direction": "Architecto quaerat.",
+                        "property": "Rerum expedita."
+                    }, {
+                        "direction": "Architecto quaerat.",
+                        "property": "Rerum expedita."
+                    }]
+                },
+                "page": {
+                    "type": "integer",
+                    "description": "Page number to fetch",
+                    "example": 4658442424691683851,
+                    "format": "int64"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "description": "Number of items per page",
+                    "example": 8393811985086540430,
+                    "format": "int64"
+                }
+            },
+            "example": {
+                "filter": 5788124398608409906,
+                "order": [{
+                    "direction": "Architecto quaerat.",
+                    "property": "Rerum expedita."
+                }, {
+                    "direction": "Architecto quaerat.",
+                    "property": "Rerum expedita."
+                }],
+                "page": 4658442424691683851,
+                "pageSize": 8393811985086540430
+            },
+            "required": ["page", "pageSize"]
+        },
+        "OrderSpecs": {
+            "title": "OrderSpecs",
+            "type": "object",
+            "properties": {
+                "direction": {
+                    "type": "string",
+                    "description": "Sort direction. One of 'asc' (ascending) or 'desc' (descenting).",
+                    "example": "Architecto quaerat."
+                },
+                "property": {
+                    "type": "string",
+                    "description": "Order by property",
+                    "example": "Rerum expedita."
+                }
+            },
+            "example": {
+                "direction": "Architecto quaerat.",
+                "property": "Rerum expedita."
+            }
+        },
+        "PaginatedResourcesMedia": {
+            "title": "Mediatypeidentifier",
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DatabloxResource"
+                    },
+                    "description": "List of resources",
+                    "example": [{
+                        "backend": {
+                            "awsEndpoint": "Delectus aliquid quia aliquam dolore id consectetur.",
+                            "awsRegion": "Soluta aut illo omnis aliquid totam.",
+                            "collection": {
+                                "dynamoGSI": 5161640249498773000,
+                                "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                                "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                                "dynamoReadCapacity": 8066685581955153659,
+                                "dynamoWriteCapacity": 4856487563112190394,
+                                "enableTtl": false,
+                                "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                                "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                                "ttl": 2723488881610954744,
+                                "ttlAttribute": "Voluptatem et."
+                            },
+                            "credentials": {
+                                "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                                "password": "Qui aut ut sint ut.",
+                                "username": "Aut ea occaecati omnis sed itaque rerum."
+                            },
+                            "database": "Officiis autem ut ea.",
+                            "host": "Vero occaecati error nulla rerum voluptatibus.",
+                            "type": "Inventore saepe quidem."
+                        },
+                        "createdAt": 1145754628330979132,
+                        "createdBy": "Quo est.",
+                        "id": "Eius ipsa consequatur doloribus.",
+                        "name": "Enim et voluptatum ut a magnam.",
+                        "schema": "Velit necessitatibus recusandae minus aut."
+                    }]
+                },
+                "page": {
+                    "type": "integer",
+                    "description": "Current page number",
+                    "example": 1200125421367710907,
+                    "format": "int64"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "description": "Number of items per page",
+                    "example": 180694814485363818,
+                    "format": "int64"
+                },
+                "total": {
+                    "type": "integer",
+                    "description": "Total number of items",
+                    "example": 3357209322550512456,
+                    "format": "int64"
+                }
+            },
+            "description": "PaginatedResourcesMedia media type (default view)",
+            "example": {
+                "items": [{
+                    "backend": {
+                        "awsEndpoint": "Delectus aliquid quia aliquam dolore id consectetur.",
+                        "awsRegion": "Soluta aut illo omnis aliquid totam.",
+                        "collection": {
+                            "dynamoGSI": 5161640249498773000,
+                            "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                            "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                            "dynamoReadCapacity": 8066685581955153659,
+                            "dynamoWriteCapacity": 4856487563112190394,
+                            "enableTtl": false,
+                            "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                            "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                            "ttl": 2723488881610954744,
+                            "ttlAttribute": "Voluptatem et."
+                        },
+                        "credentials": {
+                            "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                            "password": "Qui aut ut sint ut.",
+                            "username": "Aut ea occaecati omnis sed itaque rerum."
+                        },
+                        "database": "Officiis autem ut ea.",
+                        "host": "Vero occaecati error nulla rerum voluptatibus.",
+                        "type": "Inventore saepe quidem."
+                    },
+                    "createdAt": 1145754628330979132,
+                    "createdBy": "Quo est.",
+                    "id": "Eius ipsa consequatur doloribus.",
+                    "name": "Enim et voluptatum ut a magnam.",
+                    "schema": "Velit necessitatibus recusandae minus aut."
+                }],
+                "page": 1200125421367710907,
+                "pageSize": 180694814485363818,
+                "total": 3357209322550512456
+            }
+        },
+        "ResourcePayload": {
+            "title": "ResourcePayload",
+            "type": "object",
+            "properties": {
+                "backend": {
+                    "$ref": "#/definitions/Backend"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "Resource ID (uuid)",
+                    "example": "Nostrum provident assumenda."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Resource name",
+                    "example": "Amet quaerat odio illo qui et nobis."
+                },
+                "schema": {
+                    "type": "string",
+                    "description": "Schema URI",
+                    "example": "Earum sed minus magnam."
+                }
+            },
+            "example": {
+                "backend": {
+                    "awsEndpoint": "Delectus aliquid quia aliquam dolore id consectetur.",
+                    "awsRegion": "Soluta aut illo omnis aliquid totam.",
+                    "collection": {
+                        "dynamoGSI": 5161640249498773000,
+                        "dynamoHashKey": "Qui similique est dolorem quia quidem.",
+                        "dynamoRangeKey": "Possimus ex qui suscipit possimus laborum.",
+                        "dynamoReadCapacity": 8066685581955153659,
+                        "dynamoWriteCapacity": 4856487563112190394,
+                        "enableTtl": false,
+                        "indexes": ["Maxime debitis ipsam vitae maiores.", "Maxime debitis ipsam vitae maiores."],
+                        "name": "Commodi in exercitationem voluptatum dolores tempora.",
+                        "ttl": 2723488881610954744,
+                        "ttlAttribute": "Voluptatem et."
+                    },
+                    "credentials": {
+                        "awsCredentials": "Libero dolorem quis esse molestias alias.",
+                        "password": "Qui aut ut sint ut.",
+                        "username": "Aut ea occaecati omnis sed itaque rerum."
+                    },
+                    "database": "Officiis autem ut ea.",
+                    "host": "Vero occaecati error nulla rerum voluptatibus.",
+                    "type": "Inventore saepe quidem."
+                },
+                "id": "Nostrum provident assumenda.",
+                "name": "Amet quaerat odio illo qui et nobis.",
+                "schema": "Earum sed minus magnam."
+            },
+            "required": ["name", "schema", "backend"]
+        },
+        "error": {
+            "title": "Mediatypeidentifier",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "an application-specific error code, expressed as a string value.",
+                    "example": "invalid_value"
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "a human-readable explanation specific to this occurrence of the problem.",
+                    "example": "Value of ID must be an integer"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "a unique identifier for this particular occurrence of the problem.",
+                    "example": "3F1FKVRR"
+                },
+                "meta": {
+                    "type": "object",
+                    "description": "a meta object containing non-standard meta-information about the error.",
+                    "example": {
+                        "timestamp": 1458609066
+                    },
+                    "additionalProperties": true
+                },
+                "status": {
+                    "type": "string",
+                    "description": "the HTTP status code applicable to this problem, expressed as a string value.",
+                    "example": "400"
+                }
+            },
+            "description": "Error response media type (default view)",
+            "example": {
+                "code": "invalid_value",
+                "detail": "Value of ID must be an integer",
+                "id": "3F1FKVRR",
+                "meta": {
+                    "timestamp": 1458609066
+                },
+                "status": "400"
+            }
+        }
+    },
+    "responses": {
+        "OK": {
+            "description": "OK"
+        }
+    }
+}
